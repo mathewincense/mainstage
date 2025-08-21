@@ -52,13 +52,13 @@ export default function App() {
                   <MarketOverview />
                 </div>
               </Cards>
+
+              <Cards>
+                <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
+                <Diagnostics />
+              </Cards>
             </div>
           </div>
-
-          <Cards>
-            <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
-            <Diagnostics />
-          </Cards>
         </div>
       </div>
     </div>
