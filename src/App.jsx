@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { useEffect, useRef, useState } from "react";
 
 // ====== HOW TO RUN ======
@@ -40,7 +41,7 @@ export default function App() {
           <div className="space-y-6">
             <Cards>
               <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
-              <NewsTimelines />
+              <NewsTimelines symbol="OANDA:XAUUSD" />
             </Cards>
 
             <Cards>
@@ -302,19 +303,20 @@ function MarketOverview() {
 }
 
 // ===== News =====
-function NewsTimelines() {
+function NewsTimelines({ symbol = "OANDA:XAUUSD" }) {
   const ref = useRef(null);
   useOnceWidget(
     ref,
     "https://s3.tradingview.com/external-embedding/embed-widget-timeline.js",
     {
-      feedMode: "all_symbols",
+      feedMode: "symbol",
+      symbol,
       isTransparent: true,
       displayMode: "compact",
       colorTheme: "dark",
       locale: "de_DE",
     },
-    "tv:news-timeline"
+    `tv:news-${symbol}`
   );
   return (
     <ExternalPlaceholder title="die News-Timeline">
@@ -451,6 +453,11 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
     setAlerts(updated);
     localStorage.setItem("xau_alerts", JSON.stringify(updated));
   };
+  const remove = (i) => {
+    const updated = alerts.filter((_, idx) => idx !== i);
+    setAlerts(updated);
+    localStorage.setItem("xau_alerts", JSON.stringify(updated));
+  };
 
   return (
     <div className="space-y-3">
@@ -493,9 +500,13 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
 
       {!token && <TokenSetup onSaved={() => setTokenState(resolveFinnhubToken())} />}
 
-      <AlertForm onAdd={addAlert} />
-      <AlertList alerts={alerts} onToggle={toggle} onReset={resetAlerts} />
-      <audio ref={audioRef} src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA==" preload="auto" />
+        <AlertForm onAdd={addAlert} />
+        <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
+        <audio
+          ref={audioRef}
+          src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA=="
+          preload="auto"
+        />
     </div>
   );
 }
@@ -542,7 +553,7 @@ function AlertForm({ onAdd }) {
   );
 }
 
-function AlertList({ alerts, onToggle, onReset }) {
+function AlertList({ alerts, onToggle, onRemove, onReset }) {
   if (!alerts.length) return <div className="text-sm opacity-70">Keine Alerts gesetzt.</div>;
   return (
     <div>
@@ -554,8 +565,17 @@ function AlertList({ alerts, onToggle, onReset }) {
         {alerts.map((a, i) => (
           <li key={i} className="py-2 flex items-center gap-3">
             <input type="checkbox" checked={!!a.done} onChange={() => onToggle(i)} />
-            <div className="text-sm">{a.dir} <span className="font-mono">{a.price.toFixed(2)}</span> <span className="opacity-60">{a.note}</span></div>
-            {a.ts && <div className="ml-auto text-xs opacity-60">{new Date(a.ts).toLocaleString()}</div>}
+            <div className="text-sm">
+              {a.dir} <span className="font-mono">{a.price.toFixed(2)}</span> <span className="opacity-60">{a.note}</span>
+            </div>
+            {a.ts && (
+              <div className="ml-auto text-xs opacity-60">
+                {new Date(a.ts).toLocaleString()} @ {a.last?.toFixed(2)}
+              </div>
+            )}
+            <button onClick={() => onRemove(i)} className="text-xs opacity-70 hover:opacity-100 ml-2">
+              ✕
+            </button>
           </li>
         ))}
       </ul>
