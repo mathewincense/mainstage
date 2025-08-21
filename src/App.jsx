@@ -1,4 +1,6 @@
+/* eslint-disable no-empty */
 import { useEffect, useRef, useState } from "react";
+// Nutzer lädt eigenes Alert-Audio unter /public/alert.wav hoch
 
 // ====== HOW TO RUN ======
 // 1) Vite-React-App:  npm create vite@latest gold-monitor -- --template react
@@ -13,48 +15,50 @@ export default function App() {
       <div className="px-4 pb-6 max-w-[1400px] mx-auto">
         <ConsentBanner />
         <TickerTape />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-          <div className="lg:col-span-2 space-y-6">
-            <Cards>
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
-                <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
-              </div>
-              <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
-            </Cards>
+        <div className="space-y-6 mt-6">
+          <Cards>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
+              <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
+            </div>
+            <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
+          </Cards>
 
-            <Cards>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold">Preis-Alerts</h3>
-                <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
-              </div>
-              <PriceAlerts symbolWS="OANDA:XAU_USD" />
-            </Cards>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <Cards>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-semibold">Preis-Alerts</h3>
+                  <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
+                </div>
+                <PriceAlerts symbolWS="OANDA:XAU_USD" />
+              </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
-              <EconomicCalendar />
-            </Cards>
+              <Cards>
+                <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
+                <EconomicCalendar />
+              </Cards>
+            </div>
+
+            <div className="space-y-6">
+              <Cards>
+                <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
+                <NewsTimelines symbol="OANDA:XAUUSD" />
+              </Cards>
+
+              <Cards>
+                <h3 className="text-lg font-semibold">Marktüberblick</h3>
+                <div className="h-[360px]">
+                  <MarketOverview />
+                </div>
+              </Cards>
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
-              <NewsTimelines />
-            </Cards>
-
-            <Cards>
-              <h3 className="text-lg font-semibold">Marktüberblick</h3>
-              <div className="h-[360px]">
-                <MarketOverview />
-              </div>
-            </Cards>
-
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
-              <Diagnostics />
-            </Cards>
-          </div>
+          <Cards>
+            <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
+            <Diagnostics />
+          </Cards>
         </div>
       </div>
     </div>
@@ -177,11 +181,11 @@ function TickerTape() {
     "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js",
     {
       symbols: [
+        { proName: "OANDA:XAUUSD", title: "Gold" },
+        { proName: "OANDA:XAGUSD", title: "Silber" },
         { proName: "AMEX:UUP", title: "Dollar (UUP)" },
         { proName: "AMEX:IEF", title: "US 7‑10Y (IEF)" },
-        { proName: "TVC:UKOIL", title: "Brent" },
-        { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "OANDA:XAUUSD", title: "XAUUSD" },
+        { proName: "OANDA:EURUSD", title: "EURUSD" },
       ],
       showSymbolLogo: true,
       isTransparent: true,
@@ -221,7 +225,7 @@ function AdvancedChart({ symbol = "OANDA:XAUUSD", interval = "15" }) {
   );
   return (
     <ExternalPlaceholder title="den Live-Chart">
-      <div ref={ref} style={{ height: 560 }} className="rounded-xl overflow-hidden border border-neutral-800" />
+      <div ref={ref} style={{ height: 720 }} className="rounded-xl overflow-hidden border border-neutral-800" />
     </ExternalPlaceholder>
   );
 }
@@ -274,20 +278,11 @@ function MarketOverview() {
           ],
         },
         {
-          title: "FX & Dollar",
+          title: "Dollar & Zinsen",
           symbols: [
             { s: "AMEX:UUP", d: "Dollar (UUP)" },
-            { s: "OANDA:EURUSD", d: "EURUSD" },
-            { s: "OANDA:USDJPY", d: "USDJPY" },
-          ],
-        },
-        {
-          title: "Renditen & Öl",
-          symbols: [
             { s: "AMEX:IEF", d: "US 7‑10Y (IEF)" },
-            { s: "CBOT:ZN1!", d: "10Y Note Fut" },
-            { s: "TVC:UKOIL", d: "Brent" },
-            { s: "TVC:USOIL", d: "WTI" },
+            { s: "OANDA:EURUSD", d: "EURUSD" },
           ],
         },
       ],
@@ -302,19 +297,20 @@ function MarketOverview() {
 }
 
 // ===== News =====
-function NewsTimelines() {
+function NewsTimelines({ symbol = "OANDA:XAUUSD" }) {
   const ref = useRef(null);
   useOnceWidget(
     ref,
     "https://s3.tradingview.com/external-embedding/embed-widget-timeline.js",
     {
-      feedMode: "all_symbols",
+      feedMode: "symbol",
+      symbol,
       isTransparent: true,
       displayMode: "compact",
       colorTheme: "dark",
       locale: "de_DE",
     },
-    "tv:news-timeline"
+    `tv:news-${symbol}`
   );
   return (
     <ExternalPlaceholder title="die News-Timeline">
@@ -412,7 +408,7 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
         try { new Notification("XAUUSD Alert", { body: `${last.toFixed(2)} hat Level getroffen` }); setNotifMsg("gesendet"); } catch { setNotifMsg("fehlgeschlagen"); }
       }
       let ok = false;
-      if (audioRef.current) { try { audioRef.current.currentTime = 0; audioRef.current.play(); ok = true; } catch {} }
+      if (audioRef.current) { try { audioRef.current.muted = false; audioRef.current.currentTime = 0; audioRef.current.play(); ok = true; } catch {} }
       if (!ok) playBeep();
       setSoundMsg(ok ? "audio" : "beep");
     }
@@ -438,7 +434,7 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
           try { new Notification("XAUUSD Alert", { body: `${last.toFixed(2)} hat Level getroffen` }); setNotifMsg("gesendet"); } catch { setNotifMsg("fehlgeschlagen"); }
         }
         let ok = false;
-        if (audioRef.current) { try { audioRef.current.currentTime = 0; audioRef.current.play(); ok = true; } catch {} }
+        if (audioRef.current) { try { audioRef.current.muted = false; audioRef.current.currentTime = 0; audioRef.current.play(); ok = true; } catch {} }
         if (!ok) playBeep();
         setSoundMsg(ok ? "audio" : "beep");
       }
@@ -448,6 +444,11 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
   const resetAlerts = () => { setAlerts([]); localStorage.setItem("xau_alerts", "[]"); };
   const toggle = (i) => {
     const updated = alerts.map((a, idx) => idx === i ? { ...a, done: !a.done } : a);
+    setAlerts(updated);
+    localStorage.setItem("xau_alerts", JSON.stringify(updated));
+  };
+  const remove = (i) => {
+    const updated = alerts.filter((_, idx) => idx !== i);
     setAlerts(updated);
     localStorage.setItem("xau_alerts", JSON.stringify(updated));
   };
@@ -493,9 +494,13 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
 
       {!token && <TokenSetup onSaved={() => setTokenState(resolveFinnhubToken())} />}
 
-      <AlertForm onAdd={addAlert} />
-      <AlertList alerts={alerts} onToggle={toggle} onReset={resetAlerts} />
-      <audio ref={audioRef} src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA==" preload="auto" />
+        <AlertForm onAdd={addAlert} />
+        <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
+        <audio
+          ref={audioRef}
+          src="/alert.wav"
+          preload="auto"
+        />
     </div>
   );
 }
@@ -542,7 +547,7 @@ function AlertForm({ onAdd }) {
   );
 }
 
-function AlertList({ alerts, onToggle, onReset }) {
+function AlertList({ alerts, onToggle, onRemove, onReset }) {
   if (!alerts.length) return <div className="text-sm opacity-70">Keine Alerts gesetzt.</div>;
   return (
     <div>
@@ -554,8 +559,17 @@ function AlertList({ alerts, onToggle, onReset }) {
         {alerts.map((a, i) => (
           <li key={i} className="py-2 flex items-center gap-3">
             <input type="checkbox" checked={!!a.done} onChange={() => onToggle(i)} />
-            <div className="text-sm">{a.dir} <span className="font-mono">{a.price.toFixed(2)}</span> <span className="opacity-60">{a.note}</span></div>
-            {a.ts && <div className="ml-auto text-xs opacity-60">{new Date(a.ts).toLocaleString()}</div>}
+            <div className="text-sm">
+              {a.dir} <span className="font-mono">{a.price.toFixed(2)}</span> <span className="opacity-60">{a.note}</span>
+            </div>
+            {a.ts && (
+              <div className="ml-auto text-xs opacity-60">
+                {new Date(a.ts).toLocaleString()} @ {a.last?.toFixed(2)}
+              </div>
+            )}
+            <button onClick={() => onRemove(i)} className="text-xs opacity-70 hover:opacity-100 ml-2">
+              ✕
+            </button>
           </li>
         ))}
       </ul>
