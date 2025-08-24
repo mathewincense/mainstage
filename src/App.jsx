@@ -171,6 +171,7 @@ function ExternalPlaceholder({ title, children }) {
 
 // ===== TradingView: Ticker Tape =====
 // Verwendet frei einbettbare Proxys für Indizes und Renditen.
+// DXY & VIX werden über FRED bereitgestellt, um Lizenzbeschränkungen zu umgehen.
 function TickerTape() {
   const ref = useRef(null);
   useOnceWidget(
@@ -180,11 +181,11 @@ function TickerTape() {
       symbols: [
         { proName: "OANDA:XAUUSD", title: "XAU/USD" },
         { proName: "TVC:GOLD", title: "Gold Futures" },
-        { proName: "FX_IDC:USDOLLAR", title: "DXY" },
+        { proName: "FRED:DTWEXBGS", title: "DXY" },
         { proName: "FRED:DGS10", title: "US 10Y" },
         { proName: "FRED:DGS2", title: "US 2Y" },
         { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "TVC:VIX", title: "VIX" },
+        { proName: "FRED:VIXCLS", title: "VIX" },
         { proName: "BITSTAMP:BTCUSD", title: "BTC/USD" },
       ],
       showSymbolLogo: true,
