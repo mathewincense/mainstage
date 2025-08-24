@@ -11,51 +11,47 @@ export default function App() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <Header />
-      <div className="px-4 pb-6 max-w-[1400px] mx-auto">
+      <div className="px-4 pb-6">
         <ConsentBanner />
         <TickerTape />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-          <div className="lg:col-span-2 space-y-6">
-            <Cards>
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
-                <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
-              </div>
-              <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
-            </Cards>
+        <div className="grid grid-cols-12 gap-6 mt-6">
+          <Cards className="col-span-12">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
+              <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
+            </div>
+            <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
+          </Cards>
 
-            <Cards>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold">Preis-Alerts</h3>
-                <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
-              </div>
-              <PriceAlerts symbolWS="OANDA:XAU_USD" />
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-lg font-semibold">Preis-Alerts</h3>
+              <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
+            </div>
+            <PriceAlerts symbolWS="OANDA:XAU_USD" />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
-              <EconomicCalendar />
-            </Cards>
-          </div>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
+            <EconomicCalendar />
+          </Cards>
 
-          <div className="space-y-6">
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
-              <NewsTimelines symbol="OANDA:XAUUSD" />
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
+            <NewsTimelines symbol="OANDA:XAUUSD" />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold">Marktüberblick</h3>
-              <div className="h-[360px]">
-                <MarketOverview />
-              </div>
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold">Marktüberblick</h3>
+            <div className="h-[360px]">
+              <MarketOverview />
+            </div>
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
-              <Diagnostics />
-            </Cards>
-          </div>
+          <Cards className="col-span-12">
+            <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
+            <Diagnostics />
+          </Cards>
         </div>
       </div>
     </div>
@@ -65,7 +61,7 @@ export default function App() {
 function Header() {
   return (
     <div className="border-b border-neutral-800">
-      <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="size-8 rounded-2xl bg-yellow-500/20 flex items-center justify-center">🥇</div>
           <div>
@@ -79,8 +75,12 @@ function Header() {
   );
 }
 
-function Cards({ children }) {
-  return <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 p-3 shadow-inner">{children}</div>;
+function Cards({ children, className = "" }) {
+  return (
+    <div className={`bg-neutral-900/60 rounded-2xl border border-neutral-800 p-3 shadow-inner ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 // ========= Consent & Utilities =========
@@ -171,6 +171,7 @@ function ExternalPlaceholder({ title, children }) {
 
 // ===== TradingView: Ticker Tape =====
 // Verwendet frei einbettbare Proxys für Indizes und Renditen.
+// DXY & VIX werden über FRED bereitgestellt, um Lizenzbeschränkungen zu umgehen.
 function TickerTape() {
   const ref = useRef(null);
   useOnceWidget(
@@ -180,11 +181,11 @@ function TickerTape() {
       symbols: [
         { proName: "OANDA:XAUUSD", title: "XAU/USD" },
         { proName: "TVC:GOLD", title: "Gold Futures" },
-        { proName: "FX_IDC:USDOLLAR", title: "DXY" },
+        { proName: "FRED:DTWEXBGS", title: "DXY" },
         { proName: "FRED:DGS10", title: "US 10Y" },
         { proName: "FRED:DGS2", title: "US 2Y" },
         { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "TVC:VIX", title: "VIX" },
+        { proName: "FRED:VIXCLS", title: "VIX" },
         { proName: "BITSTAMP:BTCUSD", title: "BTC/USD" },
       ],
       showSymbolLogo: true,
@@ -225,7 +226,7 @@ function AdvancedChart({ symbol = "OANDA:XAUUSD", interval = "15" }) {
   );
   return (
     <ExternalPlaceholder title="den Live-Chart">
-      <div ref={ref} style={{ height: 560 }} className="rounded-xl overflow-hidden border border-neutral-800" />
+      <div ref={ref} style={{ height: 720 }} className="rounded-xl overflow-hidden border border-neutral-800" />
     </ExternalPlaceholder>
   );
 }
