@@ -14,6 +14,7 @@ export default function App() {
       <div className="px-4 pb-6">
         <ConsentBanner />
         <TickerTape />
+
         <div className="grid grid-cols-12 gap-6 mt-6">
           <Cards className="col-span-12">
             <div className="flex items-center justify-between">
@@ -289,7 +290,7 @@ function MarketOverview() {
         {
           title: "Renditen & Öl",
           symbols: [
-            { s: "AMEX:IEF", d: "US 7‑10Y (IEF)" },
+            { s: "AMEX:IEF", d: "US 7-10Y (IEF)" },
             { s: "CBOT:ZN1!", d: "10Y Note Fut" },
             { s: "TVC:UKOIL", d: "Brent" },
             { s: "TVC:USOIL", d: "WTI" },
@@ -487,7 +488,7 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
           }}
           className="underline opacity-80 hover:opacity-100"
         >
-          Test‑Notification
+          Test-Notification
         </button>
         <button
           onClick={() => {
@@ -498,19 +499,19 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
           }}
           className="underline opacity-80 hover:opacity-100"
         >
-          Test‑Sound
+          Test-Sound
         </button>
       </div>
 
       {!token && <TokenSetup onSaved={() => setTokenState(resolveFinnhubToken())} />}
 
-        <AlertForm onAdd={addAlert} />
-        <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
-        <audio
-          ref={audioRef}
-          src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA=="
-          preload="auto"
-        />
+      <AlertForm onAdd={addAlert} />
+      <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
+      <audio
+        ref={audioRef}
+        src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA=="
+        preload="auto"
+      />
     </div>
   );
 }
