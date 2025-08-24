@@ -170,7 +170,7 @@ function ExternalPlaceholder({ title, children }) {
 }
 
 // ===== TradingView: Ticker Tape =====
-// DXY: UUP (ETF). US10Y: IEF (ETF) — Widgets‑kompatible Proxys.
+// Verwendet frei einbettbare Proxys für Indizes und Renditen.
 function TickerTape() {
   const ref = useRef(null);
   useOnceWidget(
@@ -179,12 +179,12 @@ function TickerTape() {
     {
       symbols: [
         { proName: "OANDA:XAUUSD", title: "XAU/USD" },
-        { proName: "COMEX:GC1!", title: "Gold Futures" },
-        { proName: "TVC:DXY", title: "DXY" },
-        { proName: "TVC:US10Y", title: "US 10Y" },
-        { proName: "TVC:US02Y", title: "US 2Y" },
+        { proName: "TVC:GOLD", title: "Gold Futures" },
+        { proName: "FX_IDC:USDOLLAR", title: "DXY" },
+        { proName: "FRED:DGS10", title: "US 10Y" },
+        { proName: "FRED:DGS2", title: "US 2Y" },
         { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "CBOE:VIX", title: "VIX" },
+        { proName: "TVC:VIX", title: "VIX" },
         { proName: "BITSTAMP:BTCUSD", title: "BTC/USD" },
       ],
       showSymbolLogo: true,
