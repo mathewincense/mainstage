@@ -14,8 +14,7 @@ export default function App() {
       <div className="px-4 pb-6 max-w-[1400px] mx-auto">
         <ConsentBanner />
         <TickerTape />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 mt-6">
             <Cards>
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
@@ -36,9 +35,7 @@ export default function App() {
               <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
               <EconomicCalendar />
             </Cards>
-          </div>
 
-          <div className="space-y-6">
             <Cards>
               <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
               <NewsTimelines symbol="OANDA:XAUUSD" />
@@ -56,7 +53,6 @@ export default function App() {
               <Diagnostics />
             </Cards>
           </div>
-        </div>
       </div>
     </div>
   );
@@ -171,6 +167,7 @@ function ExternalPlaceholder({ title, children }) {
 
 // ===== TradingView: Ticker Tape =====
 // Verwendet frei einbettbare Proxys für Indizes und Renditen.
+// DXY & VIX werden über FRED bereitgestellt, um Lizenzbeschränkungen zu umgehen.
 function TickerTape() {
   const ref = useRef(null);
   useOnceWidget(
@@ -180,11 +177,11 @@ function TickerTape() {
       symbols: [
         { proName: "OANDA:XAUUSD", title: "XAU/USD" },
         { proName: "TVC:GOLD", title: "Gold Futures" },
-        { proName: "FX_IDC:USDOLLAR", title: "DXY" },
+        { proName: "FRED:DTWEXBGS", title: "DXY" },
         { proName: "FRED:DGS10", title: "US 10Y" },
         { proName: "FRED:DGS2", title: "US 2Y" },
         { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "TVC:VIX", title: "VIX" },
+        { proName: "FRED:VIXCLS", title: "VIX" },
         { proName: "BITSTAMP:BTCUSD", title: "BTC/USD" },
       ],
       showSymbolLogo: true,
@@ -225,7 +222,7 @@ function AdvancedChart({ symbol = "OANDA:XAUUSD", interval = "15" }) {
   );
   return (
     <ExternalPlaceholder title="den Live-Chart">
-      <div ref={ref} style={{ height: 560 }} className="rounded-xl overflow-hidden border border-neutral-800" />
+      <div ref={ref} style={{ height: 720 }} className="rounded-xl overflow-hidden border border-neutral-800" />
     </ExternalPlaceholder>
   );
 }
