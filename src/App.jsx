@@ -178,11 +178,14 @@ function TickerTape() {
     "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js",
     {
       symbols: [
-        { proName: "AMEX:UUP", title: "Dollar (UUP)" },
-        { proName: "AMEX:IEF", title: "US 7‑10Y (IEF)" },
-        { proName: "TVC:UKOIL", title: "Brent" },
+        { proName: "OANDA:XAUUSD", title: "XAU/USD" },
+        { proName: "COMEX:GC1!", title: "Gold Futures" },
+        { proName: "TVC:DXY", title: "DXY" },
+        { proName: "TVC:US10Y", title: "US 10Y" },
+        { proName: "TVC:US02Y", title: "US 2Y" },
         { proName: "TVC:USOIL", title: "WTI" },
-        { proName: "OANDA:XAUUSD", title: "XAUUSD" },
+        { proName: "CBOE:VIX", title: "VIX" },
+        { proName: "BITSTAMP:BTCUSD", title: "BTC/USD" },
       ],
       showSymbolLogo: true,
       isTransparent: true,
