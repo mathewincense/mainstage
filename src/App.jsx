@@ -11,48 +11,49 @@ export default function App() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <Header />
-      <div className="px-4 pb-6 max-w-[1400px] mx-auto">
+      <div className="px-4 pb-6">
         <ConsentBanner />
         <TickerTape />
-          <div className="space-y-6 mt-6">
-            <Cards>
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
-                <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
-              </div>
-              <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
-            </Cards>
 
-            <Cards>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold">Preis-Alerts</h3>
-                <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
-              </div>
-              <PriceAlerts symbolWS="OANDA:XAU_USD" />
-            </Cards>
+        <div className="grid grid-cols-12 gap-6 mt-6">
+          <Cards className="col-span-12">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">XAUUSD — Live</h2>
+              <span className="text-xs opacity-70">Quelle: TradingView Widget</span>
+            </div>
+            <AdvancedChart symbol="OANDA:XAUUSD" interval="1" />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
-              <EconomicCalendar />
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-lg font-semibold">Preis-Alerts</h3>
+              <span className="text-xs opacity-70">Finnhub WebSocket oder Simulation</span>
+            </div>
+            <PriceAlerts symbolWS="OANDA:XAU_USD" />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
-              <NewsTimelines symbol="OANDA:XAUUSD" />
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold mb-2">Wichtige Termine (Economic Calendar)</h3>
+            <EconomicCalendar />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold">Marktüberblick</h3>
-              <div className="h-[360px]">
-                <MarketOverview />
-              </div>
-            </Cards>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold mb-2">Schnell-News</h3>
+            <NewsTimelines symbol="OANDA:XAUUSD" />
+          </Cards>
 
-            <Cards>
-              <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
-              <Diagnostics />
-            </Cards>
-          </div>
+          <Cards className="col-span-12 lg:col-span-6">
+            <h3 className="text-lg font-semibold">Marktüberblick</h3>
+            <div className="h-[360px]">
+              <MarketOverview />
+            </div>
+          </Cards>
+
+          <Cards className="col-span-12">
+            <h3 className="text-lg font-semibold mb-2">Diagnose & Tests</h3>
+            <Diagnostics />
+          </Cards>
+        </div>
       </div>
     </div>
   );
@@ -61,7 +62,7 @@ export default function App() {
 function Header() {
   return (
     <div className="border-b border-neutral-800">
-      <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="size-8 rounded-2xl bg-yellow-500/20 flex items-center justify-center">🥇</div>
           <div>
@@ -75,8 +76,12 @@ function Header() {
   );
 }
 
-function Cards({ children }) {
-  return <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 p-3 shadow-inner">{children}</div>;
+function Cards({ children, className = "" }) {
+  return (
+    <div className={`bg-neutral-900/60 rounded-2xl border border-neutral-800 p-3 shadow-inner ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 // ========= Consent & Utilities =========
@@ -285,7 +290,7 @@ function MarketOverview() {
         {
           title: "Renditen & Öl",
           symbols: [
-            { s: "AMEX:IEF", d: "US 7‑10Y (IEF)" },
+            { s: "AMEX:IEF", d: "US 7-10Y (IEF)" },
             { s: "CBOT:ZN1!", d: "10Y Note Fut" },
             { s: "TVC:UKOIL", d: "Brent" },
             { s: "TVC:USOIL", d: "WTI" },
@@ -483,7 +488,7 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
           }}
           className="underline opacity-80 hover:opacity-100"
         >
-          Test‑Notification
+          Test-Notification
         </button>
         <button
           onClick={() => {
@@ -494,19 +499,19 @@ function PriceAlerts({ symbolWS = "OANDA:XAU_USD" }) {
           }}
           className="underline opacity-80 hover:opacity-100"
         >
-          Test‑Sound
+          Test-Sound
         </button>
       </div>
 
       {!token && <TokenSetup onSaved={() => setTokenState(resolveFinnhubToken())} />}
 
-        <AlertForm onAdd={addAlert} />
-        <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
-        <audio
-          ref={audioRef}
-          src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA=="
-          preload="auto"
-        />
+      <AlertForm onAdd={addAlert} />
+      <AlertList alerts={alerts} onToggle={toggle} onRemove={remove} onReset={resetAlerts} />
+      <audio
+        ref={audioRef}
+        src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAABkYXRhAAAAAA=="
+        preload="auto"
+      />
     </div>
   );
 }
